@@ -1,0 +1,190 @@
+a {
+	text-decoration: none;
+}
+
+input {
+	width: 100%;
+	font-size: 25px;
+	padding: 5px;
+}
+
+.main-container {
+   	margin-left: 35%;
+   	margin-right: 35%;
+   	margin-top: 10%;
+   	padding: 2px;		       	
+   	display: block;
+
+}
+
+.main-block {
+	background-color: #f4f7f9;
+   	color: black;
+   	padding: 5px;
+}
+
+.task {
+	background-color: #f4f7f9;
+   	color: black;
+   	display: block;
+   	margin: 3px;
+   	font-size: 0px;
+   	border-radius: 5px;
+   	border: 2px solid #c3bfbf;
+}
+
+.task-button {
+	width: 30px;
+	display: inline-block;
+	font-size: initial;
+	text-align: center;
+}
+
+.del-button:hover,.check-button:hover, .add-button:hover {
+	background-color: blue;
+	color: white;
+	cursor: pointer;
+}
+
+.task-text {
+	width: calc(100% - 60px);
+	display: inline-block;
+	font-size: initial;
+}
+
+.add-button {
+	text-align: center;
+	background-color: #67d0b6;
+   	color: white;
+   	padding: 2px;
+   	font-size: 30px;
+   	font-weight: 900;
+   	border-radius: 5px;
+   	padding: 2px;
+   	margin-top:	5px;
+   	font-family: initial;
+   	border: none;
+}
+
+.cancel-button {
+	text-align: center;
+	background-color: #eaafaf;
+   	color: white;
+   	padding: 2px;
+   	font-size: 30px;
+   	font-weight: 900;
+   	border-radius: 5px;
+   	padding: 2px;
+   	margin-top:	5px;
+   	font-family: initial;
+   	border: none;
+}
+
+.check-button {
+	color: #67d0b6;
+	border-right: 2px solid #c3bfbf;
+	font-size: 30px;
+}
+
+.del-button {
+	color: white;
+	background-color: #eaafaf;
+	border-left: 2px solid #c3bfbf; 
+	font-size: 30px;
+}
+
+.border-text {
+	color: #000000c2;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-size: 18px;
+	font-weight: 900;
+}
+
+.form-margin {
+	margin: 0;
+}
+
+.done {
+	text-decoration: line-through #000000c2;
+}
+
+.vh-min-84 {
+	min-height: 84vh;
+}
+
+.vh-min-88 {
+	min-height: 88vh;
+}
+
+.vh-min-80 {
+	min-height: 80vh;
+}
+
+.vh-min-20 {
+	min-height: 20vh;
+}
+
+.vh-min-10 {
+	min-height: 10vh;
+}
+
+.vh-min-90 {
+	min-height: 90vh;
+}
+
+.vh-min-8 {
+	min-height: 8vh;
+}
+
+.vh-min-6 {
+	min-height: 6vh;
+}
+
+.vh-min-4 {
+	min-height: 4vh;
+}
+
+.padding-10 {
+	padding: 10px;
+}
+
+.height-100 {
+	height: 100%
+}
+
+.margin-0 {
+	margin: 0%
+}
+.ul-menu {
+	display: inline;
+	margin-right: 20px;
+	font-size: 20px
+}
+.active {
+	text-decoration: underline;
+	font-weight: 700;
+}
+.ahover:hover {
+	text-decoration:none;
+	opacity: 1;
+}
+.ahover {
+	text-decoration:none;
+	opacity: 0.8;
+}
+.header-fixed {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 10;
+}
+.footer-fixed {
+	position: fixed;
+	bottom: 0;
+	height: 23px;
+}
+.main-margin {
+	min-height: 91vh;
+	margin-top: 61px;
+}
