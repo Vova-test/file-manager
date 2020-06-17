@@ -19,6 +19,8 @@ Route::group(['middleware' => ['auth']], function () {
         return redirect('/home');
     });
 
-	Route::get('/home', 'HomeController@index');
+	Route::get('/home/{parent?}', 'HomeController@index')->name('home');
 	Route::post('/file/vote', 'HomeController@addVote');
+	Route::post('/file/upload', 'HomeController@uploadFile')->name('file.upload');
+
 });

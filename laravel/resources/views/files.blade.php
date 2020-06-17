@@ -1,16 +1,49 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="uk-container uk-container-small">
-        <div class="col-md-8">        
+        <div class="col-md-8">   
+            <a class="uk-button-small uk-button-primary" href=
+                "#"" >Create new folder</a>      
+            <div class="uk-card uk-card-default uk-card-hover uk-width-1-1 uk-margin-top">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-expand">
+                        <ul>
+                            <h3 class="uk-card-title uk-margin-remove-bottom">
+                                Folders:   
+                            </h3>
+                            @foreach ($folders as $folder)
+                                <li>
+                                    <div class="vote-block" data-folder-id="{{$folder['id']}}">
+                                        <a class="uk-button-small uk-button-primary" href="{{ route('home',['parent'=>$folder['id']]) }}">
+                                            {{ $folder['name'] }}
+                                        </a>
+                                    </div>
+                                </li>   
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="uk-card-header uk-padding-remove-bottom uk-background-muted">
-                <p uk-margin>
-                    <a class="uk-button-small uk-button-primary" href=
-                    "#"" >Add file</a>
-                    <a class="uk-button-small uk-button-primary" href=
-                    "#"" >Create folder</a>
-                </p>
-            </div>        
+                <form action="{{route('file.upload')}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group uk-margin">
+                        <input type="file" name="image">
+                        <input type="hidden" id="folderId" name="folderId" value="{{$folderId}}">
+                    </div> 
+                    <button type="submit">Upload</button>   
+                </form>
+            </div>
             @foreach ($files as $file)
                 <div class="uk-card uk-card-default uk-card-hover uk-width-1-1 uk-margin-top">
                     <div class="uk-card-body" id="file-{{$file['id']}}">
@@ -42,6 +75,7 @@
             @endforeach
         </div>
     </div>
+    
 
     <script type="text/javascript">
         async function clickVote(element, status) {

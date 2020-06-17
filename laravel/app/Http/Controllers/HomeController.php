@@ -3,28 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\FileRequest;
 use App\Models\File;
 use App\Models\User;
 use App\Models\Voice;
+use App\Models\Folder;
 use Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    /**/
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index(File $file, User $user, Voice $voice)
+    public function __construct(
+        File $file, 
+        User $user, 
+        Voice $voice, 
+        Folder $folder)
     {
-        $files = $file->all()
+        $this->file = $file;
+        $this->user = $user;
+        $this->voice = $voice;
+        $this->folder = $folder;
+    }
+
+    public function index($parent = null)
+    {
+        $folders = $this->folder
+                        ->where('folder_id', '=', $parent)
+                        ->get()
+                        ->toArray();
+
+        $files = $this->file
+                      ->where('folder_id', '=', $parent)
+                      ->get()
                       ->toArray();
 
         $id = Auth::user()->id;
@@ -34,11 +43,11 @@ class HomeController extends Controller
         foreach ($files as $file) {
             $fileId = $file['id'];
 
-            $users = $user->leftJoin('voices', function($join) use($fileId) 
-                {
-                    $join->on('users.id', '=', 'voices.user_id')
-                         ->where('voices.file_id', '=', $fileId);
-                })
+            $users = $this->user
+                          ->leftJoin('voices', function($join) use($fileId) {
+                                $join->on('users.id', '=', 'voices.user_id')
+                                     ->where('voices.file_id', '=', $fileId);
+                            })
                           ->select([
                               'users.id',
                               'users.name'
@@ -47,28 +56,30 @@ class HomeController extends Controller
                           ->orderBy('users.name')
                           ->get();
 
-            $status = $voice->where('user_id', $id)
-                            ->where('file_id', $fileId)
-                            ->value('vote');
+            $status = $this->voice
+                           ->where('user_id', $id)
+                           ->where('file_id', $fileId)
+                           ->value('vote');
 
             $fileArray[] = [
                 'id' => $file['id'],
                 'name' => $file['name'],
-                'path' => $file['path'],
                 'users' => $users,
                 'status' => $status
             ];
         }
         
         return view('files', [
+            'folders' => $folders,
             'files' => $fileArray,
-            'userId' => $id
+            'userId' => $id,
+            'folderId' => $parent
         ]);
     }
 
-    public function addVote(Voice $voice, Request $request)
+    public function addVote(Request $request)
     {
-        $class = get_class($voice); 
+        $class = get_class($this->voice); 
 
         $newVoice = new $class();
 
@@ -77,5 +88,22 @@ class HomeController extends Controller
         }
 
         return response()->json(['success' => $success]);
+    }
+
+    public function uploadFile(FileRequest $request)
+    {
+        $fileName = $request->file('image')->getClientOriginalName();
+        $request->file('image')->storeAs('files/', $fileName, 'public');
+
+        $class = get_class($this->file); 
+
+        $newFile = new $class();
+
+        $newFile->create([
+            'name' => $fileName,
+            'folder_id' => $request->folderId
+        ]);
+
+        return redirect()->route('home');
     }
 }
