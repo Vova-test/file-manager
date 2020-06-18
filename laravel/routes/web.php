@@ -22,5 +22,5 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/home/{parent?}', 'HomeController@index')->name('home');
 	Route::post('/file/vote', 'HomeController@addVote');
 	Route::post('/file/upload', 'HomeController@uploadFile')->name('file.upload');
-
+	Route::post('/folder/add', 'HomeController@addFolder')->name('folder.add');
 });

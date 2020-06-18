@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\FileRequest;
+use App\Http\Requests\FolderRequest;
 use App\Models\File;
 use App\Models\User;
 use App\Models\Voice;
@@ -104,6 +105,17 @@ class HomeController extends Controller
             'folder_id' => $request->folderId
         ]);
 
+        return redirect()->route('home');
+    }
+
+    public function addFolder(FolderRequest $request)
+    {
+        $class = get_class($this->folder); 
+
+        $newFolder = new $class();
+
+        $newFolder->create($request->except(['_token']));
+        
         return redirect()->route('home');
     }
 }

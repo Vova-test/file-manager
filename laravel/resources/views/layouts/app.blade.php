@@ -26,6 +26,7 @@
     <!-- UIkit JS -->
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.1/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.1/dist/js/uikit-icons.min.js"></script>
+    @yield('css')
 </head>
 <body>
     <div id="app">
@@ -84,5 +85,6 @@
             @yield('content')
         </main>
     </div>
+    @yield('js')
 </body>
 </html>
