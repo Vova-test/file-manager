@@ -1,4 +1,9 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/modal_popup.css": "/css/modal_popup.css",
+    "/css/my-style.css": "/css/my-style.css",
+    "/css/task-js.css": "/css/task-js.css",
+    "/js/bootstrap.js": "/js/bootstrap.js",
+    "/js/file.blade.js": "/js/file.blade.js"
 }

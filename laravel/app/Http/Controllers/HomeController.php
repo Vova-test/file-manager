@@ -105,17 +105,17 @@ class HomeController extends Controller
             'folder_id' => $request->folderId
         ]);
 
-        return redirect()->route('home');
+        return redirect()->route('home', ['parent'=>$request->folderId]);
     }
 
-    public function addFolder(FolderRequest $request)
+    public function addFolder(Request $request)
     {
         $class = get_class($this->folder); 
 
         $newFolder = new $class();
 
         $newFolder->create($request->except(['_token']));
-        
-        return redirect()->route('home');
+
+        return redirect()->route('home', ['parent'=>$request->folder_id]);
     }
 }

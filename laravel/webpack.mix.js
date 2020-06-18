@@ -13,3 +13,10 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
+
+mix.styles('resources/css/modal_popup.css', 'public/css/modal_popup.css');
+mix.styles('resources/css/my-style.css', 'public/css/my-style.css');
+mix.styles('resources/css/task-js.css', 'public/css/task-js.css');
+
+mix.scripts('resources/js/bootstrap.js', 'public/js/bootstrap.js');
+mix.scripts('resources/js/file.blade.js', 'public/js/file.blade.js');

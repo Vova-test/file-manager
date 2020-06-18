@@ -54,8 +54,8 @@
                                 </h3>
                                 @empty($file['status'])
                                     <div class="vote-block" data-file-id="{{$file['id']}}">
-                                        <a class="uk-button-small uk-button-primary" href="#" onclick="clickVote(this, '1')">Yes</a>
-                                        <a class="uk-button-small uk-button-primary" href="#" onclick="clickVote(this, '2')">No</a>
+                                        <a class="uk-button-small uk-button-primary" href="#" onclick="clickVote(this, '1', '{{ $userId }}', '{{ csrf_token() }}')">Yes</a>
+                                        <a class="uk-button-small uk-button-primary" href="#" onclick="clickVote(this, '2', '{{ $userId }}', '{{ csrf_token() }}')">No</a>
                                     </div>
                                 @endempty
                             </div>
@@ -78,15 +78,18 @@
         <!-- The Modal -->
     <div id="modal" class="modal">
         <!-- Modal content -->
-        <div class="modal-content" id='folder' data-value="{{$folderId}}">
+        <div class="modal-content">
             <p><span class="close" onclick="hideModal()">&times;</span></p>
-            <input class="contact_input" id="folder-name" name="folder-name" type="text" placeholder="Folder name" required="required" value="">
-            <p id="folder-name-error" class="valid-error"></p>
-            <div class="button">
-                <a class="booking-send" href="#" onclick="saveFolder('{{ route('folder.add') }}')">
-                    Save
-                </a>
-            </div>
+            <form id="modal_form" action="{{ route('folder.add') }}" method="post" enctype="multipart/form-data">
+            @csrf
+                <input class="contact_input" id="folder-name" name="name" type="text" placeholder="Folder name" required pattern='[a-zа-яёїі0-9]/i' value="">
+                <input type="hidden" id="folderId" name="folder_id" value="{{$folderId}}">
+                <div class="button">
+                    <a href="javascript:{}" type="submit" class="booking-send"  onclick="document.getElementById('modal_form').submit();">
+                        Save
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
@@ -96,104 +99,6 @@
     <link href="{{ asset('css/modal_popup.css') }}" rel="stylesheet">
 @endsection
 
-@section('js')    
-
-    <script type="text/javascript">
-        async function clickVote(element, status) {
-            let url = `/file/vote`;
-            let userId = "{{ $userId }}";
-            let voteBlock = element.closest('.vote-block');
-            let fileId = voteBlock.getAttribute('data-file-id');
-            let statusText = (status==='1') ? 'Approved' : 'Rejected';
-
-            try {
-                const response = await fetch(url, {
-                    method: "post",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        'vote': status,
-                        'user_id': userId,
-                        'file_id': fileId
-                    })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-
-                    voteBlock.parentNode.removeChild(voteBlock);  
-
-                    let statusTeg = document.getElementById(`file-${fileId}`).querySelector(`div[name="status-${userId}"]`);
-
-                    statusTeg.textContent = statusText;
-                }
-
-            } catch (error) {
-                
-            }
-        }
-    </script>
-    <script type="text/javascript">
-        var errorTag = document.getElementById('folder-name-error');
-        var errorMessage = 'The folder name cannot be empty and must consist only of letters and numbers!';
-        var nameTag = document.getElementById('folder-name')
-        var modal = document.getElementById('modal')
-
-        function showModal() {
-            document.getElementById('modal').style.display = "block";
-        }
-
-        function hideModal() {
-            errorTag.style.display = "none";
-            nameTag.value = '';
-            modal.style.display = "none";
-        }
-
-        nameTag.onfocus = function() {
-            errorTag.style.display = "none";
-        };
-
-        async function saveFolder(url) {
-            let folderId = document.getElementById('folder').getAttribute('data-value');
-            let name = nameTag.value.trim();
-
-            if (folderId.length == 0) {
-                folderId = null;
-            }
-
-            let st = new RegExp('[^а-яА-ЯЁёІіЇїa-zA-Z0-9]+');
-
-            if (name.length < 1 || name.length > 255 || st.test(name)) {
-                
-                errorTag.textContent = errorMessage;
-                errorTag.style.display = "block";
-                return;
-            }
-
-            try {
-                const response = await fetch(url, {
-                    method: "post",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        'folder_id': folderId,
-                        'name': name
-                    })  
-                });
-
-                hideModal();
-
-            } catch (error) {
-
-                console.log(error);               
-            }
-        }
-    </script>
+@section('js')
+    <script src="{{ asset('js/file.blade.js') }}"></script>    
 @endsection
